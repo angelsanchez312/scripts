@@ -1,4 +1,6 @@
 #!/bin/sh
+# Execute by running:
+# wget -O install-docker.sh https://raw.githubusercontent.com/angelsanchez312/scripts/main/install-docker.sh && chmod +x install-docker.sh && sh ./install-docker.sh
 # This is a shell script that installs Docker and Docker Compose on Linux distributions based on their package managers.
 # The script first detects whether the command prefix should be "sudo" or "doas" and then determines the Linux distribution.
 # Based on the distribution, the script installs Docker and Docker-Compose using the appropriate package manager.
