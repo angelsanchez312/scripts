@@ -109,13 +109,13 @@ case "$distribution" in
 esac
 
 # Determine init system type (systemd and OpenRC)
-if [ -f /run/systemd/system ]; then
+if [ -f /run/systemd/system ] || [ -d "/run/systemd" ]; then
   # Systemd is being used
   # Enable Docker service with systemd
   initsystem=systemd
   $ELEVATED_PREFIX systemctl enable docker.service
   $ELEVATED_PREFIX systemctl start docker.service
-elif [ -f /sbin/openrc-init ] || [ -f /sbin/openrc ]; then
+elif [ -f /sbin/openrc-init ] || [ -f /sbin/openrc ] || [ -d "/run/openrc" ]; then
 #elif [ -f /sbin/openrc ]; then
   # OpenRC is being used
   # Enable Docker service with OpenRC
