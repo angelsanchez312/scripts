@@ -111,8 +111,8 @@ if [ -f /run/systemd/system ]; then
   # Enable Docker service with systemd
   $ELEVATED_PREFIX systemctl enable docker.service
   $ELEVATED_PREFIX systemctl start docker.service
-#elif [ -f /sbin/openrc-init ] || [ -f /sbin/openrc ]; then
-elif [ -f /sbin/openrc ]; then
+elif [ -f /sbin/openrc-init ] || [ -f /sbin/openrc ]; then
+#elif [ -f /sbin/openrc ]; then
   # OpenRC is being used
   # Enable Docker service with OpenRC
   $ELEVATED_PREFIX rc-update add docker boot
@@ -122,7 +122,6 @@ else
   echo "Couldn't detect init system. Please enable and start the service manually."
 fi
 
-# v2
 # Check if Docker is installed
 if ! command -v docker >/dev/null 2>&1; then
     docker_installed=false
