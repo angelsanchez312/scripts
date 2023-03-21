@@ -45,7 +45,7 @@ case "$distribution" in
     $ELEVATED_PREFIX apt-get remove docker docker-engine docker.io containerd runc
     # Setup the repository
     $ELEVATED_PREFIX apt-get update
-    $ELEVATED_PREFIX apt-get install ca-certificates curl gnupg lsb-release
+    $ELEVATED_PREFIX apt-get install -y ca-certificates curl gnupg lsb-release
     # Add Docker’s official GPG key
     $ELEVATED_PREFIX mkdir -m 0755 -p /etc/apt/keyrings
     curl -fsSL https://download.docker.com/linux/debian/gpg | $ELEVATED_PREFIX gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -55,7 +55,7 @@ case "$distribution" in
       $(lsb_release -cs) stable" | $ELEVATED_PREFIX tee /etc/apt/sources.list.d/docker.list > /dev/null
     # Install Docker Engine, containerd, and Docker Compose
     $ELEVATED_PREFIX apt-get update
-    $ELEVATED_PREFIX apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
+    $ELEVATED_PREFIX apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
     ;;
   "Ubuntu")
     # Ubuntu
@@ -63,11 +63,7 @@ case "$distribution" in
     $ELEVATED_PREFIX apt-get remove docker docker-engine docker.io containerd runc
     # Setup the repository
     $ELEVATED_PREFIX apt-get update
-    $ELEVATED_PREFIX apt-get install \
-        ca-certificates \
-        curl \
-        gnupg \
-        lsb-release
+    $ELEVATED_PREFIX apt-get install -y ca-certificates curl gnupg lsb-release
     # Add Docker’s official GPG key
     $ELEVATED_PREFIX mkdir -m 0755 -p /etc/apt/keyrings
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | $ELEVATED_PREFIX gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -80,11 +76,10 @@ case "$distribution" in
     $ELEVATED_PREFIX apt-get update
     # Install Docker Engine, containerd, and Docker Compose
     $ELEVATED_PREFIX apt-get update
-    $ELEVATED_PREFIX apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
+    $ELEVATED_PREFIX apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose
     ;;
   "Fedora")
     # Fedora
-    $ELEVATED_PREFIX dnf install -y docker docker-compose
     # Uninstall old versions
     $ELEVATED_PREFIX dnf remove docker \
                       docker-client \
@@ -102,7 +97,7 @@ case "$distribution" in
         --add-repo \
         https://download.docker.com/linux/fedora/docker-ce.repo
     # Install docker engine
-    $ELEVATED_PREFIX dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    $ELEVATED_PREFIX dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     ;;
   "Arch")
     # Install from default repo
