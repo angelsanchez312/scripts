@@ -1,4 +1,8 @@
 #!/bin/sh
+# This is a shell script that installs Docker and Docker Compose on Linux distributions based on their package managers.
+# The script first detects whether the command prefix should be "sudo" or "doas" and then determines the Linux distribution.
+# Based on the distribution, the script installs Docker and Docker-Compose using the appropriate package manager.
+# It also detects the init system type and enables and starts the Docker service accordingly.
 
 # Detect elevated command prefix
 if command -v sudo >/dev/null 2>&1; then
@@ -94,7 +98,7 @@ case "$distribution" in
     ;;
   "Arch")
     # Install from default repo
-    sudo pacman -S --noconfirm docker docker-compose
+    $ELEVATED_PREFIX pacman -S --noconfirm docker docker-compose
     ;;
   "Alpine")
     $ELEVATED_PREFIX apk add docker docker-compose
