@@ -11,13 +11,14 @@
 if [ "$(id -u)" -eq 0 ]; then
   ELEVATED_PREFIX=""
 else
+  # Check if sudo or doas is available
   if command -v sudo >/dev/null 2>&1; then
-      ELEVATED_PREFIX="sudo"
+    ELEVATED_PREFIX="sudo"
   elif command -v doas >/dev/null 2>&1; then
-      ELEVATED_PREFIX="doas"
+    ELEVATED_PREFIX="doas"
   else
-      echo "This script requires sudo or doas to run."
-      exit 1
+    echo "Error: This script requires elevated privileges, but neither sudo nor doas was found." >&2
+    exit 1
   fi
 fi
 
