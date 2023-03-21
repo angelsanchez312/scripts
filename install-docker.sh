@@ -6,14 +6,19 @@
 # Based on the distribution, the script installs Docker and Docker-Compose using the appropriate package manager.
 # It also detects the init system type and enables and starts the Docker service accordingly.
 
-# Detect elevated command prefix
-if command -v sudo >/dev/null 2>&1; then
-    ELEVATED_PREFIX="sudo"
-elif command -v doas >/dev/null 2>&1; then
-    ELEVATED_PREFIX="doas"
+
+# Detect elevated command prefix. Checks if the script is being run as root.
+if [ "$(id -u)" -eq 0 ]; then
+  ELEVATED_PREFIX=""
 else
-    echo "This script requires sudo or doas to run."
-    exit 1
+  if command -v sudo >/dev/null 2>&1; then
+      ELEVATED_PREFIX="sudo"
+  elif command -v doas >/dev/null 2>&1; then
+      ELEVATED_PREFIX="doas"
+  else
+      echo "This script requires sudo or doas to run."
+      exit 1
+  fi
 fi
 
 # Determine the Linux distribution
@@ -111,17 +116,36 @@ esac
 if [ -f /run/systemd/system ]; then
   # Systemd is being used
   # Enable Docker service with systemd
+  initsystem=systemd
   $ELEVATED_PREFIX systemctl enable docker.service
   $ELEVATED_PREFIX systemctl start docker.service
 elif [ -f /sbin/openrc-init ] || [ -f /sbin/openrc ]; then
 #elif [ -f /sbin/openrc ]; then
   # OpenRC is being used
   # Enable Docker service with OpenRC
+  initsystem=openrc
   $ELEVATED_PREFIX rc-update add docker boot
   $ELEVATED_PREFIX service docker start
 else
   # Unknown init system
   echo "Couldn't detect init system. Please enable and start the service manually."
+fi
+
+# Post Install
+# Checks if its being run as root
+if [ "$(id -u)" -eq 0 ]; then
+    echo "Run as root. No need to add root to the docker group."
+else
+# else - script is ran as a user
+    # if init system is systemd
+    if [ $initsystem = systemd ]; then
+        echo "Hello, world!"
+    # if init system is openrc
+    elif [ $initsystem = openrc ]; then
+        addgroup $USER docker
+    else
+        echo "Unknown init system."
+    fi
 fi
 
 # Check if Docker is installed
